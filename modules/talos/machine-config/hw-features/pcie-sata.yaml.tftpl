@@ -1,0 +1,12 @@
+machine:
+  kernel:
+    modules:
+      - name: ahci
+        parameters:
+          - reset
+      - name: ata_piix
+      - name: nvme
+      - name: sd_mod
+  nodeLabels:
+    feature.node.kubernetes.io/pci-sata: "true"
+    node-role.kubernetes.io/storage: "true"

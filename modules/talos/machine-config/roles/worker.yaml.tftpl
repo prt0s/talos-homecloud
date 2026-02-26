@@ -1,0 +1,19 @@
+machine:
+  time:
+    disabled: false
+    servers:
+      - time.cloudflare.com
+    bootTimeout: 2m0s
+  files:
+    - path: /etc/cri/conf.d/20-customization.part
+      op: create
+      content: |
+        [plugins."io.containerd.cri.v1.images"]
+          discard_unpacked_layers = false
+  kubelet:
+    extraArgs:
+      rotate-server-certificates: true
+  network:
+    hostname: ${hostname}
+  nodeLabels:
+    topology.kubernetes.io/zone: ${node_name}

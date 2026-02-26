@@ -1,0 +1,7 @@
+customization:
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/usb-modem-drivers
+  extraKernelArgs:
+    - intel_iommu=on
+    - iommu=pt

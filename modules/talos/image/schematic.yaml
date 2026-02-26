@@ -1,0 +1,10 @@
+customization:
+  systemExtensions:
+    officialExtensions:
+      # - siderolabs/i915-ucode
+      # - siderolabs/intel-ucode
+      - siderolabs/qemu-guest-agent
+      - siderolabs/usb-modem-drivers
+  extraKernelArgs:
+    - intel_iommu=on
+    - iommu=pt

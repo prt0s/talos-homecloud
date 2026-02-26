@@ -1,0 +1,20 @@
+machine:
+  install:
+    disk: /dev/nvme0n1
+    image: factory.talos.dev/installer/${schematic_id}:v1.10.4
+    wipe: true
+    bootloader: true
+  sysctls:
+    net.core.bpf_jit_harden: 1
+  kubelet:
+    extraConfig:
+      systemReserved:
+        cpu: 100m
+        memory: 500Mi
+      containerLogMaxSize: 50Mi
+      containerLogMaxFiles: 5
+  network:
+    interfaces:
+      - deviceSelector:
+          physical: true
+        dhcp: true

@@ -1,0 +1,14 @@
+customization:
+  systemExtensions:
+    officialExtensions:
+      # - siderolabs/i915-ucode
+      - siderolabs/intel-ucode
+      - siderolabs/usb-modem-drivers
+  extraKernelArgs:
+    - intel_iommu=on
+    - iommu=pt
+    - iommu.passthrough=1
+    - vfio-pci.ids=10de:249d,10de:228b,8086:51f0
+    - cpufreq.default_governor=performance
+    - intel_idle.max_cstate=0
+    - mitigations=off

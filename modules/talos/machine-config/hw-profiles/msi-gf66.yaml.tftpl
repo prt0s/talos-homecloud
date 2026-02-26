@@ -1,0 +1,35 @@
+machine:
+  install:
+    disk: /dev/nvme0n1
+    image: factory.talos.dev/installer/${schematic_id}:v1.10.4
+    wipe: true
+    bootloader: true
+  sysfs:
+    devices.system.node.node0.hugepages.hugepages-2048kB.nr_hugepages: 2048
+    devices.system.node.node0.hugepages.hugepages-1048576kB.nr_hugepages: 32
+  sysctls:
+    net.core.bpf_jit_harden: 1
+  kubelet:
+    extraConfig:
+      registerNode: true
+      registerWithTaints:
+      -   effect: NoSchedule
+          key: dedicated
+          value: hw-talos-msi-gf66
+      systemReserved:
+        memory: 1Gi
+      containerLogMaxSize: 50Mi
+      containerLogMaxFiles: 5
+      cpuManagerPolicy: static
+      cpuManagerPolicyOptions:
+        full-pcpus-only: "true"
+        strict-cpu-reservation: "true"
+      reservedSystemCPUs: "19"
+      featureGates:
+        CPUManagerPolicyOptions: true
+        CPUManagerPolicyBetaOptions: true
+  network:
+    interfaces:
+      - deviceSelector:
+          physical: true
+        dhcp: true

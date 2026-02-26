@@ -1,0 +1,49 @@
+machine:
+  time:
+    disabled: false
+    servers:
+      - time.cloudflare.com
+    bootTimeout: 2m0s
+  files:
+    - path: /etc/cri/conf.d/20-customization.part
+      op: create
+      content: |
+        [plugins."io.containerd.cri.v1.images"]
+          discard_unpacked_layers = false
+  kubelet:
+    extraArgs:
+      allowed-unsafe-sysctls: net.ipv4.conf.all.src_valid_mark
+      rotate-server-certificates: true
+  network:
+    hostname: ${hostname}
+  nodeLabels:
+    topology.kubernetes.io/zone: ${node_name}
+
+cluster:
+  allowSchedulingOnControlPlanes: true
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true
+  extraManifests:
+    - https://raw.githubusercontent.com/argoproj/argo-cd/v${argocd_version}/manifests/install.yaml
+    - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
+  inlineManifests:
+  - name: cilium-values
+    contents: |
+      ---
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cilium-values
+        namespace: kube-system
+      data:
+        values.yaml: |-
+          ${indent(10, cilium_values)}
+  - name: cilium-bootstrap
+    contents: |
+      ${indent(6, cilium_install)}
+  - name: argocd-bootstrap
+    contents: |
+      ${indent(6, argocd_install)}

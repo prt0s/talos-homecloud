@@ -1,0 +1,8 @@
+machine:
+  kernel:
+    modules:
+      - name: vfio
+      - name: vfio_pci
+      - name: vfio_iommu_type1
+  nodeLabels:
+    feature.node.kubernetes.io/pci-usb-passthrough: "true"
